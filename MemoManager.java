@@ -1,3 +1,4 @@
+package se;
 import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.PopupMenu;
