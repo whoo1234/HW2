@@ -1,12 +1,14 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-class AccountBook {
+public class AccountBook {
 	private int selectmenu;
 	private boolean done;
 	private int nowindexnum;
 	private ArrayList<String[]> listMember = new ArrayList<String[]>();
 	private int total = 0;
 	Scanner scan = new Scanner(System.in);
+	Scanner scan2 = new Scanner(System.in);
 
 	public void actAccountBook() {
 		done = true;
@@ -25,137 +27,157 @@ class AccountBook {
 		System.out.println("4. 삭제");
 		System.out.println("5. 돌아가기");
 		System.out.println("=========================================");
-
 		selectmenu = scan.nextInt();
 		System.out.println("-----------------------------------------");
 	}
 
 	public void actMenu() {
-		if (selectmenu == 1)
+		switch (selectmenu) {
+		case 1:
 			showList();
-		else if (selectmenu == 2)
+			break;
+		case 2:
 			addList();
-		else if (selectmenu == 3)
+			break;
+		case 3:
 			modifyMember();
-		else if (selectmenu == 4)
+			break;
+		case 4:
 			deleteMember();
-		else if (selectmenu == 5)
+			break;
+		case 5:
 			backMain();
-
+			break;
+		default:
+			System.out.println("다시 고르세요.");
+			System.out.println();
+			break;
+		}
 	}
 
 	public void showList() {
-		String arraymem[] = new String[5];
-
 		System.out.println("번호\t종류\t이름\t날짜\t금액");
 		System.out.println("-----------------------------------------");
+		printMember();
+		System.out.println("-----------------------------------------");
+		System.out.println("총 금액 :" + total);
+	}
+
+	public void printMember() {
+		String arraymem[] = new String[5];
 		for (int i = 0; i < listMember.size(); i++) {
 			arraymem = listMember.get(i);
 			for (int j = 0; j < 5; j++)
 				System.out.print(arraymem[j] + "\t");
 			System.out.println();
 		}
-
-		System.out.println("-----------------------------------------");
-		System.out.println("총 금액 :" + total);
 	}
 
-	public void addList() {
+	public int addList() {
 		int add;
+		String budget[] = new String[5];
 		nowindexnum = listMember.size();
 
 		System.out.println("\n1. 수입");
 		System.out.println("2. 지출");
-
 		add = scan.nextInt();
-
-		if (add == 1)
-			supplementBudget(nowindexnum);
-		else if (add == 2)
-			subtractBudget(nowindexnum);
+		if (add == 1) {
+			budget = inputSupplement(nowindexnum, budget);
+			supplementBudget(budget);
+		} else if (add == 2) {
+			budget = inputSubtract(nowindexnum, budget);
+			subtractBudget(budget);
+		}
+		return listMember.size();
 	}
 
-	public void supplementBudget(int nowindexnum) {
-		String budget[] = new String[5];
-
+	public String[] inputSupplement(int nowindexnum, String[] budget) {
 		budget[0] = String.valueOf(nowindexnum);
 		budget[1] = "수입";
 		System.out.print("이름 :");
-		budget[2] = scan.next();
+		budget[2] = scan2.nextLine();
 		System.out.print("날짜(ex.170118) :");
 		budget[3] = scan.next();
 		System.out.print("금액 :");
 		budget[4] = scan.next();
-
-		listMember.add(budget);
-		total += Integer.parseInt(budget[4]);
+		return budget;
 	}
 
-	public void subtractBudget(int nowindexnum) {
-		String budget[] = new String[5];
-
+	public String[] inputSubtract(int nowindexnum, String[] budget) {
 		budget[0] = String.valueOf(nowindexnum);
 		budget[1] = "지출";
 		System.out.print("이름 :");
-		budget[2] = scan.next();
+		budget[2] = scan2.nextLine();
 		System.out.print("날짜(ex.170118) :");
 		budget[3] = scan.next();
 		System.out.print("금액 :");
 		budget[4] = scan.next();
-
-		listMember.add(budget);
-		total -= Integer.parseInt(budget[4]);
+		return budget;
 	}
 
-	public void modifyMember() {
+	public int supplementBudget(String[] budget) {
+		listMember.add(budget);
+		total += Integer.parseInt(budget[4]);
+		return listMember.size();
+	}
+
+	public int subtractBudget(String[] budget) {
+		listMember.add(budget);
+		total -= Integer.parseInt(budget[4]);
+
+		return listMember.size();
+	}
+
+	public String[] modifyMember() {
 		int indexnumber;
+		int selectedNumber;
+		int originalBudget;
 		String modifymember[] = new String[5];
+		String modifiedmember[] = new String[5];
 
 		System.out.println("\n수정할 항목의 번호를 입력하세요.");
 		indexnumber = scan.nextInt();
 		modifymember = listMember.get(indexnumber);
+		originalBudget = Integer.parseInt(modifymember[4]);
+		System.out.println("\n1. 수입");
+		System.out.println("2. 지출");
+		selectedNumber = scan.nextInt();
 
-		if (modifymember[1] == "수입") {
-			String budget[] = new String[5];
-
-			budget[0] = String.valueOf(indexnumber);
-			budget[1] = "수입";
-			System.out.print("이름 :");
-			budget[2] = scan.next();
-			System.out.print("날짜(ex.170118) :");
-			budget[3] = scan.next();
-			System.out.print("금액 :");
-			budget[4] = scan.next();
-
-			total -= Integer.parseInt(modifymember[4]);
-			total += Integer.parseInt(budget[4]);
-
-			listMember.set(indexnumber, budget);
-		} else if (modifymember[1] == "지출") {
-			String budget[] = new String[5];
-
-			budget[0] = String.valueOf(indexnumber);
-			budget[1] = "지출";
-			System.out.print("이름 :");
-			budget[2] = scan.next();
-			System.out.print("날짜(ex.170118) :");
-			budget[3] = scan.next();
-			System.out.print("금액 :");
-			budget[4] = scan.next();
-
-			total += Integer.parseInt(modifymember[4]);
-			total -= Integer.parseInt(budget[4]);
-
-			listMember.set(indexnumber, budget);
+		if (selectedNumber == 1) {
+			total -= originalBudget;
+			modifymember = inputSupplement(indexnumber, modifymember);
+		} else if (selectedNumber == 2) {
+			total += originalBudget;
+			modifymember = inputSubtract(indexnumber, modifymember);
 		}
+
+		modifiedmember = modify(modifymember, indexnumber);
+		return modifiedmember;
+	}
+
+	public String[] modify(String[] modifymember, int indexnumber) {
+		if (modifymember[1] == "수입") {
+			total += Integer.parseInt(modifymember[4]);
+			listMember.set(indexnumber, modifymember);
+		} else if (modifymember[1] == "지출") {
+			total += Integer.parseInt(modifymember[4]);
+			listMember.set(indexnumber, modifymember);
+		}
+		return listMember.get(indexnumber);
 	}
 
 	public void deleteMember() {
 		int indexnumber;
-		String removemember[] = new String[5];
 
 		System.out.println("\n삭제할 항목의 번호를 입력하세요.");
 		indexnumber = scan.nextInt();
+		delete(indexnumber);
+	}
+
+	public boolean delete(int indexnumber) {
+		int originalListSize = listMember.size();
+		String removemember[] = new String[5];
+
 		removemember = listMember.get(indexnumber);
 
 		if (removemember[1] == "수입") {
@@ -165,27 +187,21 @@ class AccountBook {
 			total += Integer.parseInt(removemember[4]);
 			listMember.remove(indexnumber);
 		}
-
+		
 		for (int i = 0; i < listMember.size(); i++) {
 			removemember = listMember.get(i);
 			removemember[0] = String.valueOf(i);
 		}
-
 		System.out.println("삭제되었습니다.");
+
+		if (listMember.size() == originalListSize)
+			return false;
+		else
+			return true;
 	}
 
 	public void backMain() {
 		System.out.println("메인으로 돌아갑니다.");
 		done = false;
 	}
-
-}
-
-public class AccountBookTestProgram {
-	static AccountBook ac = new AccountBook();
-
-	public static void main(String[] args) {
-		ac.actAccountBook();
-	}
-
 }
