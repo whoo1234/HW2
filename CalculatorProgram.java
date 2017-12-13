@@ -1,7 +1,7 @@
-
+package se;
 import java.util.*;
 
-public class CalculatorTest {
+public class CalculatorProgram {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		boolean endCalculator = true;
@@ -42,6 +42,8 @@ class Calculator {
 	private Scanner scanner;
 	private int convertDirection = 0;
 	private double input = 0.0;
+	private final double POUND_TO_KG = 0.453592;
+	private final double INCH_TO_CM = 2.54;
 
 	public void printMenu() {
 		System.out.println("1. 사칙 연산");
@@ -64,20 +66,16 @@ class Calculator {
 	
 			switch (oper) {
 			case "+":
-				result = num1 + num2;
+				result = add(num1, num2);
 				break;
 			case "-":
-				result = num1 - num2;
+				result = sub(num1, num2);
 				break;
 			case "*":
-				result = num1 * num2;
+				result = mul(num1, num2);
 				break;
 			case "/":
-				if (num2 == 0) {
-					System.out.println("0으로 나눌 수 없습니다. 결과값은 0으로 출력됩니다.");
-					break;
-				}
-				result = num1 / num2;
+				result = div(num1, num2);
 				break;
 			default:
 				System.out.println("입력한 식에 오류가 있습니다.");
@@ -86,6 +84,26 @@ class Calculator {
 		}catch (Exception e) {
 			System.out.println("입력 오류입니다.");
 		}
+	}
+	
+	public double add(double a, double b) {
+		return a + b;
+	}
+	
+	public double sub(double a, double b) {
+		return a - b;
+	}
+	
+	public double mul(double a, double b) {
+		return a * b;
+	}
+	
+	public double div(double a, double b) {
+		if (b == 0) {
+			System.out.println("0으로 나눌 수 없습니다. 결과값은 0으로 출력됩니다.");
+			return 0;
+		}
+		return a / b;
 	}
 
 	public void convertUnits() {
@@ -98,6 +116,7 @@ class Calculator {
 		
 		try {
 			selectedUnit = scanner.nextInt();
+			scanner.nextLine();
 		} catch(InputMismatchException e) {
 			scanner.nextLine();
 		}
@@ -119,7 +138,6 @@ class Calculator {
 
 	public void convertBetweenPoundAndKg() { 
 		scanner = new Scanner(System.in);
-		final double POUND_TO_KG = 0.453592;
 		System.out.println("1. pound -> kg");
 		System.out.println("2. kg -> pound");
 		System.out.print("변환 방향을 선택하세요 >> ");
@@ -133,22 +151,42 @@ class Calculator {
 		switch(convertDirection) {
 		case 1 :
 			System.out.print("변환할 값을 입력하세요(pound) >> ");
-			input = scanner.nextDouble();
-			System.out.printf("%.2f kg\n", input * POUND_TO_KG);
+			try {
+				input = scanner.nextDouble();
+				System.out.printf("%.2f kg\n", convertPoundToKg(input));
+			} catch(InputMismatchException e) {
+				System.out.println("입력 오류입니다.");
+				scanner.nextLine();
+			}
 			break;
+			
 		case 2 :
 			System.out.print("변환할 값을 입력하세요(kg) >> ");
-			input = scanner.nextDouble();
-			System.out.printf("%.2f pound\n", input / POUND_TO_KG);
+			
+			try {
+				input = scanner.nextDouble();
+				System.out.printf("%.2f pound\n", convertKgToPound(input));
+			} catch(InputMismatchException e) {
+				System.out.println("입력 오류입니다.");
+				scanner.nextLine();
+			}
 			break;
+			
 		default :
 			System.out.println("1-2 내의 정수로 입력하세요.");
 		}
 	}
+	
+	double convertPoundToKg(double input) {
+		return input * POUND_TO_KG;
+	}
+	
+	double convertKgToPound(double input) {
+		return input / POUND_TO_KG;
+	}
 
 	public void convertBetweenInchAndCm() {
 		scanner = new Scanner(System.in);
-		final double INCH_TO_CM = 2.54;
 		System.out.println("1. inch -> cm");
 		System.out.println("2. cm -> inch");
 		System.out.print("변환 방향을 선택하세요 >> ");
@@ -162,17 +200,37 @@ class Calculator {
 		switch(convertDirection) {
 		case 1 :
 			System.out.print("변환할 값을 입력하세요(inch) >> ");
-			input = scanner.nextDouble();
-			System.out.printf("%.2f cm\n", input * INCH_TO_CM);
+			
+			try {
+				input = scanner.nextDouble();
+				System.out.printf("%.2f cm\n", convertInchToCm(input));
+			} catch(InputMismatchException e) {
+				System.out.println("입력 오류입니다.");
+				scanner.nextLine();
+			}
 			break;
 		case 2 :
 			System.out.print("변환할 값을 입력하세요(cm) >> ");
-			input = scanner.nextDouble();
-			System.out.printf("%.2f inch\n", input / INCH_TO_CM );
+			
+			try {
+				input = scanner.nextDouble();
+				System.out.printf("%.2f inch\n", convertCmToInch(input));
+			} catch(InputMismatchException e) {
+				System.out.println("입력 오류입니다.");
+				scanner.nextLine();
+			}
 			break;
 		default :
 			System.out.println("1-2 내의 정수로 입력하세요.");
 		}
+	}
+	
+	double convertInchToCm(double input) {
+		return input * INCH_TO_CM;
+	}
+	
+	double convertCmToInch(double input) {
+		return input / INCH_TO_CM ;
 	}
 
 	public void convertBetweenFahrenheitAndCelsius() {
@@ -190,25 +248,37 @@ class Calculator {
 		switch(convertDirection) {
 		case 1 :
 			System.out.print("변환할 값을 입력하세요(°F) >> ");
-			input = scanner.nextDouble();
-			System.out.println(fToC(input) + " °C");
+			try {
+				input = scanner.nextDouble();
+				System.out.printf("%.2f °C\n", convertFToC(input));
+			} catch(InputMismatchException e) {
+				System.out.println("입력 오류입니다.");
+				scanner.nextLine();
+			}
 			break;
+			
 		case 2 :
 			System.out.print("변환할 값을 입력하세요(°C) >> ");
-			input = scanner.nextDouble();
-			System.out.println(CToF(input) + " °F");
+			
+			try {
+				input = scanner.nextDouble();
+				System.out.printf("%.2f °F\n", convertCToF(input));
+			} catch(InputMismatchException e) {
+				System.out.println("입력 오류입니다.");
+				scanner.nextLine();
+			}
 			break;
+			
 		default :
 			System.out.println("1-2 내의 정수로 입력하세요.");
 		}
 	}
 
-	private double fToC(double input) {
+	private double convertFToC(double input) {
 		return (input - 32) / 1.8;
 	}
 
-	private double CToF(double input) {
+	private double convertCToF(double input) {
 		return input * 1.8 + 32;
 	}
 }
-
