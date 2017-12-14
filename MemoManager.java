@@ -1,5 +1,4 @@
 ﻿package se;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -123,14 +122,14 @@ public class MemoManager extends JFrame implements ActionListener{
 		   File file = new File(dfName);
 		   if(file.exists()){
 			   if(file.delete()){
-				   System.out.println("파일삭제 성공");
-				   JOptionPane.showMessageDialog(this, "파일삭제 성공");
+				   JOptionPane.showMessageDialog(this, "파일이 삭제되었습니다.");
+				   newPerformed();
 			   }
 			   else{
-				   JOptionPane.showMessageDialog(this, "파일삭제 실패");
+				   JOptionPane.showMessageDialog(this, "파일 삭제에 실패했습니다.");
 			   }
 		   }else{
-			   JOptionPane.showMessageDialog(this, "파일을 찾지 못했습니다.");
+			   JOptionPane.showMessageDialog(this, dialog.getFile()+" 파일을 찾을 수 없습니다.");
 		   } 
 	   }catch (Exception e2) {
 		  JOptionPane.showMessageDialog(this, "삭제 오류");
