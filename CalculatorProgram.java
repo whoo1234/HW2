@@ -86,19 +86,19 @@ class Calculator {
 		}
 	}
 	
-	public double add(double a, double b) {
+	double add(double a, double b) {
 		return a + b;
 	}
 	
-	public double sub(double a, double b) {
+	double sub(double a, double b) {
 		return a - b;
 	}
 	
-	public double mul(double a, double b) {
+	double mul(double a, double b) {
 		return a * b;
 	}
 	
-	public double div(double a, double b) {
+	double div(double a, double b) {
 		if (b == 0) {
 			System.out.println("0으로 나눌 수 없습니다. 결과값은 0으로 출력됩니다.");
 			return 0;
@@ -209,6 +209,7 @@ class Calculator {
 				scanner.nextLine();
 			}
 			break;
+			
 		case 2 :
 			System.out.print("변환할 값을 입력하세요(cm) >> ");
 			
