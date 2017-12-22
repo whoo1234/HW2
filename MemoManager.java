@@ -53,6 +53,19 @@ public class MemoManager extends JFrame implements ActionListener{
   mnuDelete.addActionListener(this);
   mnuExit.addActionListener(this);
  }
+ public boolean isFileTxt(String fileName){
+	 String ext=fileName.substring(fileName.lastIndexOf(".")+1, fileName.length());
+	 if(ext.equals("txt"))
+		 return true;
+	return false;
+ }
+ public boolean confirmDelete(){
+	 int result=JOptionPane.showConfirmDialog(null,"파일을 삭제하시겠습니까?","삭제 재확인", JOptionPane.YES_NO_OPTION);
+	 if(result==JOptionPane.YES_OPTION)
+		 return true;
+	 else
+		 return false;
+ }
  
  public void exitPerformed(){
 	 System.exit(0);
@@ -93,7 +106,14 @@ public class MemoManager extends JFrame implements ActionListener{
 		   return;
 	   
 	   String dfName = dialog.getDirectory() + dialog.getFile();
- 
+
+	   // 파일 확장자가 .txt가 아닐 때 에러처리 해주기
+	   if(!isFileTxt(dfName)){
+		   JOptionPane.showMessageDialog(this, "열수 없는 형태의 파일입니다.");
+		   return;
+	   }
+	   
+	   
 	   try {
 		   	BufferedReader reader = new BufferedReader(new FileReader(dfName));
 		   	Memo.setText("");
@@ -121,12 +141,14 @@ public class MemoManager extends JFrame implements ActionListener{
 	   try {
 		   File file = new File(dfName);
 		   if(file.exists()){
-			   if(file.delete()){
-				   JOptionPane.showMessageDialog(this, "파일이 삭제되었습니다.");
-				   newPerformed();
-			   }
-			   else{
-				   JOptionPane.showMessageDialog(this, "파일 삭제에 실패했습니다.");
+			   if(confirmDelete()){
+				   if(file.delete()){
+					   JOptionPane.showMessageDialog(this, "파일이 삭제되었습니다.");
+					   newPerformed();
+				   }
+				   else{
+					   JOptionPane.showMessageDialog(this, "파일 삭제에 실패했습니다.");
+				   }
 			   }
 		   }else{
 			   JOptionPane.showMessageDialog(this, dialog.getFile()+" 파일을 찾을 수 없습니다.");
@@ -135,7 +157,7 @@ public class MemoManager extends JFrame implements ActionListener{
 		  JOptionPane.showMessageDialog(this, "삭제 오류");
 	   }
  }
- 
+
  @Override
  public void actionPerformed(ActionEvent e) {   
    if(e.getSource() == btnClear) {
