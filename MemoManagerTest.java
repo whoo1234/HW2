@@ -1,0 +1,23 @@
+package se;
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class MemoManagerTest {
+
+	@Test
+	public void testSavePerformed() {
+		MemoManager Memo = new MemoManager();
+		String path="C:\\Users\\win\\Desktop\\xmas.txt";
+		String contents="Merry X-mas and Happy New Year!";
+		assertTrue(Memo.savePerformed(path, contents));
+		assertEquals(contents,Memo.openPerformed(path));
+	}
+	
+	@Test
+	public void testDeletePerformed() {
+		MemoManager Memo = new MemoManager();
+		String path="C:\\Users\\win\\Desktop\\xmas.txt";
+		assertTrue(Memo.deletePerformed(path));
+		assertEquals("Not Exist",Memo.openPerformed(path));
+	}
+}

@@ -1,4 +1,4 @@
-package se;
+﻿package se;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -78,16 +78,7 @@ public class MemoManager extends JFrame implements ActionListener{
 		String fileName=dfName.substring(dfName.lastIndexOf("\\")+1, dfName.length());
 		return fileName;
 	}
-	
-	public boolean confirmDelete(){
-		int result=JOptionPane.showConfirmDialog(this,"파일을 삭제하시겠습니까?","삭제 재확인", JOptionPane.YES_NO_OPTION);
-		
-		if(result==JOptionPane.YES_OPTION)
-			return true;
-		else
-			return false;
-	}
-	
+
 	public String returnContents(){
 		return Memo.getText();
 	}
@@ -118,12 +109,12 @@ public class MemoManager extends JFrame implements ActionListener{
 				return;
 			
 			String dfName = dialog.getDirectory()+dialog.getFile();
+			System.out.println(dfName);
 			openPerformed(dfName);
 		}
 		
 		else{
 			dialog = new FileDialog(this, windowTitle, FileDialog.LOAD);
-			System.out.println(dialog);
 			dialog.setDirectory("."); 
 			dialog.setVisible(true); 
 		   
@@ -131,7 +122,7 @@ public class MemoManager extends JFrame implements ActionListener{
 				return;
 			
 			String dfName = dialog.getDirectory()+dialog.getFile();
-			deletePerformed(dfName);
+			confirmDelete(dfName);
 		}
 		
 	}
@@ -142,12 +133,12 @@ public class MemoManager extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(this, "메모장은 텍스트파일만 읽고 쓸 수 있습니다.\n확장자(.txt)를 꼭 붙여서 저장해주세요.");
 			return false;
 		}
+		
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(dfName));
 			writer.write(contents);
 			writer.close();
 			setTitle(returnFileName(dfName));
-			System.out.println(Memo.getText());
 			return true;
 		}catch (Exception e2) {
 		   JOptionPane.showMessageDialog(this, "저장 오류");
@@ -155,40 +146,56 @@ public class MemoManager extends JFrame implements ActionListener{
 		return false;
 	}
 	
-	public void openPerformed(String dfName){
+	public String openPerformed(String dfName){
 	   
 		if(!isFileTxt(dfName)){
 			JOptionPane.showMessageDialog(this, "열수 없는 형태의 파일입니다.\n확장자가 .txt인 파일을 선택해 주세요.");
-			return;
+			return null;
 		}
 	   
 	   try {
-		   	BufferedReader reader = new BufferedReader(new FileReader(dfName));
-		   	Memo.setText("");
-		   	String line;
-		   	while((line = reader.readLine()) != null) {
-		   		Memo.append(line + "\n");
-		   	}
-		   	reader.close(); 
-		   	setTitle(returnFileName(dfName));
+		   File file=new File(dfName);
+		   if(file.exists()){
+		   		BufferedReader reader = new BufferedReader(new FileReader(dfName));
+		   		Memo.setText("");
+		   		String line, contents="";
+		   		while((line = reader.readLine()) != null) {
+		   			contents+=line+"\n";
+		   		}
+		   		contents=contents.substring(0, contents.length()-1);
+		   		Memo.setText(contents);
+		   		reader.close(); 
+		   		setTitle(returnFileName(dfName));
+		   		return contents;
+		   }
+		   else{
+			   return "Not Exist";
+		   }
 	   	} catch (Exception e2) {
 	   		JOptionPane.showMessageDialog(this, "열기 오류");
 	   	}
+	   return null;
+	}
+	
+	public void confirmDelete(String dfName){
+		int result=JOptionPane.showConfirmDialog(this,"파일을 삭제하시겠습니까?","삭제 재확인", JOptionPane.YES_NO_OPTION);
+		if(result==JOptionPane.YES_OPTION)
+			deletePerformed(dfName);
+		else
+			return;
 	}
 	
 	public boolean deletePerformed(String dfName){
 		try {
 			File file = new File(dfName);
 			if(file.exists()){
-				if(confirmDelete()){
-					if(file.delete()){
-						JOptionPane.showMessageDialog(this, "파일이 삭제되었습니다.");
-						newPerformed();
-						return true;
-					}
-					else{
-						JOptionPane.showMessageDialog(this, "파일 삭제에 실패했습니다.");
-					}
+				if(file.delete()){
+					//JOptionPane.showMessageDialog(this, "파일이 삭제되었습니다.");
+					newPerformed();
+					return true;
+				}
+				else{
+					JOptionPane.showMessageDialog(this, "파일 삭제에 실패했습니다.");
 				}
 			}else{
 				JOptionPane.showMessageDialog(this, returnFileName(dfName)+" 파일을 찾을 수 없습니다.");
