@@ -1,3 +1,5 @@
+package se;
+
 public class AccountBookProgram {
 	static AccountBook ac = new AccountBook();
 
@@ -5,3 +7,4 @@ public class AccountBookProgram {
 		ac.actAccountBook();
 	}
 }
+

@@ -1,3 +1,5 @@
+package se;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,9 +8,10 @@ public class AccountBook {
 	private boolean done;
 	private int nowindexnum;
 	private ArrayList<String[]> listMember = new ArrayList<String[]>();
-	private int total = 0;
 	Scanner scan = new Scanner(System.in);
 	Scanner scan2 = new Scanner(System.in);
+	
+	int lastIndex;
 
 	public void actAccountBook() {
 		done = true;
@@ -60,7 +63,7 @@ public class AccountBook {
 		System.out.println("-----------------------------------------");
 		printMember();
 		System.out.println("-----------------------------------------");
-		System.out.println("총 금액 :" + total);
+		System.out.println("총 금액 :" + printTotal());
 	}
 
 	public void printMember() {
@@ -71,6 +74,22 @@ public class AccountBook {
 				System.out.print(arraymem[j] + "\t");
 			System.out.println();
 		}
+	}
+	
+	public int printTotal(){
+		int total = 0;
+		String[] me = new String[5];
+		
+		for(int i=0; i<listMember.size(); i++){
+			me = listMember.get(i);
+			if(me[1] == "수입"){
+				total += Integer.parseInt(me[4]);
+			}
+			else if(me[1] == "지출"){
+				total -= Integer.parseInt(me[4]);
+			}
+		}
+		return total;
 	}
 
 	public int addList() {
@@ -96,7 +115,7 @@ public class AccountBook {
 		budget[1] = "수입";
 		System.out.print("이름 :");
 		budget[2] = scan2.nextLine();
-		System.out.print("날짜(ex.170118) :");
+		System.out.print("날짜(ex.170118):");
 		budget[3] = scan.next();
 		System.out.print("금액 :");
 		budget[4] = scan.next();
@@ -115,89 +134,85 @@ public class AccountBook {
 		return budget;
 	}
 
-	public int supplementBudget(String[] budget) {
+	public String[] supplementBudget(String[] budget) {
 		listMember.add(budget);
-		total += Integer.parseInt(budget[4]);
-		return listMember.size();
+		lastIndex = listMember.size()-1;
+		return listMember.get(lastIndex);
 	}
 
-	public int subtractBudget(String[] budget) {
+	public String[] subtractBudget(String[] budget) {
 		listMember.add(budget);
-		total -= Integer.parseInt(budget[4]);
-
-		return listMember.size();
+		lastIndex = listMember.size()-1;
+		return listMember.get(lastIndex);
 	}
 
-	public String[] modifyMember() {
+	public void modifyMember() {
 		int indexnumber;
 		int selectedNumber;
-		int originalBudget;
 		String modifymember[] = new String[5];
-		String modifiedmember[] = new String[5];
 
 		System.out.println("\n수정할 항목의 번호를 입력하세요.");
+		try{
 		indexnumber = scan.nextInt();
 		modifymember = listMember.get(indexnumber);
-		originalBudget = Integer.parseInt(modifymember[4]);
 		System.out.println("\n1. 수입");
 		System.out.println("2. 지출");
 		selectedNumber = scan.nextInt();
-
+		
 		if (selectedNumber == 1) {
-			total -= originalBudget;
 			modifymember = inputSupplement(indexnumber, modifymember);
-		} else if (selectedNumber == 2) {
-			total += originalBudget;
+		}
+		else if (selectedNumber == 2){
 			modifymember = inputSubtract(indexnumber, modifymember);
 		}
-
-		modifiedmember = modify(modifymember, indexnumber);
-		return modifiedmember;
-	}
-
-	public String[] modify(String[] modifymember, int indexnumber) {
-		if (modifymember[1] == "수입") {
-			total += Integer.parseInt(modifymember[4]);
-			listMember.set(indexnumber, modifymember);
-		} else if (modifymember[1] == "지출") {
-			total += Integer.parseInt(modifymember[4]);
-			listMember.set(indexnumber, modifymember);
+		
+		listMember.set(indexnumber, modifymember);
+		}catch(IndexOutOfBoundsException e){
+			System.out.println("저장된 데이터가 없어서 수정할 수 없습니다.");
+			System.out.println("먼저 데이터를 입력해주세요. ^^");
 		}
-		return listMember.get(indexnumber);
 	}
 
 	public void deleteMember() {
 		int indexnumber;
 
 		System.out.println("\n삭제할 항목의 번호를 입력하세요.");
-		indexnumber = scan.nextInt();
-		delete(indexnumber);
+		try{
+			indexnumber = scan.nextInt();
+			delete(indexnumber);
+		}catch(IndexOutOfBoundsException e){
+			System.out.println("저장된 데이터가 없어서 삭제할 수 없습니다.");
+			System.out.println("먼저 데이터를 입력해주세요.");
+		}		
 	}
 
-	public boolean delete(int indexnumber) {
-		int originalListSize = listMember.size();
+	public String[] delete(int indexnumber) {
 		String removemember[] = new String[5];
-
+		String nullarray[] = new String[5];
+		
+		try{
 		removemember = listMember.get(indexnumber);
-
-		if (removemember[1] == "수입") {
-			total -= Integer.parseInt(removemember[4]);
+		
+		
+		if (removemember[1] == "수입") 
 			listMember.remove(indexnumber);
-		} else if (removemember[1] == "지출") {
-			total += Integer.parseInt(removemember[4]);
+		else if (removemember[1] == "지출")
 			listMember.remove(indexnumber);
-		}
 		
 		for (int i = 0; i < listMember.size(); i++) {
 			removemember = listMember.get(i);
 			removemember[0] = String.valueOf(i);
 		}
 		System.out.println("삭제되었습니다.");
-
-		if (listMember.size() == originalListSize)
-			return false;
-		else
-			return true;
+		
+		lastIndex = listMember.size()-1;
+		if(lastIndex>=0)
+			return listMember.get(lastIndex);
+		}catch(IndexOutOfBoundsException e){
+			System.out.println("저장된 데이터가 없어서 삭제할 수 없습니다.");
+			System.out.println("먼저 데이터를 입력해주세요.");
+		}
+		return nullarray;
 	}
 
 	public void backMain() {
