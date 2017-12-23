@@ -74,6 +74,11 @@ public class MemoManager extends JFrame implements ActionListener{
 		return false;
 	}
  
+	public String returnFileName(String dfName){
+		String fileName=dfName.substring(dfName.lastIndexOf("\\")+1, dfName.length());
+		return fileName;
+	}
+	
 	public boolean confirmDelete(){
 		int result=JOptionPane.showConfirmDialog(this,"파일을 삭제하시겠습니까?","삭제 재확인", JOptionPane.YES_NO_OPTION);
 		
@@ -82,56 +87,75 @@ public class MemoManager extends JFrame implements ActionListener{
 		else
 			return false;
 	}
- 
-	public FileDialog openWindow(String windowTitle){
+	
+	public String returnContents(){
+		return Memo.getText();
+	}
+
+	public void openWindow(String windowTitle){
 		FileDialog dialog;
 	
 		if(windowTitle.equals("저장")){
 			dialog = new FileDialog(this, windowTitle, FileDialog.SAVE);
+			dialog.setDirectory("."); 
+			dialog.setVisible(true); 
+
+			if(dialog.getFile() == null)
+				return;
+			
+			String dfName = dialog.getDirectory()+dialog.getFile();
+			String contents = returnContents();
+			
+			savePerformed(dfName, contents);
+		}
+		
+		else if(windowTitle.equals("열기")){
+			dialog = new FileDialog(this, windowTitle, FileDialog.LOAD);
+			dialog.setDirectory("."); 
+			dialog.setVisible(true); 
+		   
+			if(dialog.getFile() == null)
+				return;
+			
+			String dfName = dialog.getDirectory()+dialog.getFile();
+			openPerformed(dfName);
 		}
 		
 		else{
 			dialog = new FileDialog(this, windowTitle, FileDialog.LOAD);
+			System.out.println(dialog);
+			dialog.setDirectory("."); 
+			dialog.setVisible(true); 
+		   
+			if(dialog.getFile() == null)
+				return;
+			
+			String dfName = dialog.getDirectory()+dialog.getFile();
+			deletePerformed(dfName);
 		}
 		
-		dialog.setDirectory("."); 
-		dialog.setVisible(true); 
-	   
-		if(dialog.getFile() == null)
-			return null;
-	
-		return dialog;
 	}
- 
-	public boolean savePerformed(){
-		FileDialog dialog=openWindow("저장");
 	
-		if(dialog==null) return false;
+	public boolean savePerformed(String dfName, String contents){
 		
-		if(!isFileTxt(dialog.getFile())){
+		if(!isFileTxt(dfName)){
 			JOptionPane.showMessageDialog(this, "메모장은 텍스트파일만 읽고 쓸 수 있습니다.\n확장자(.txt)를 꼭 붙여서 저장해주세요.");
 			return false;
 		}
-	
-		String dfName = dialog.getDirectory() + dialog.getFile();
-
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(dfName));
-			writer.write(Memo.getText());
+			writer.write(contents);
 			writer.close();
-			setTitle(dialog.getFile());
+			setTitle(returnFileName(dfName));
+			System.out.println(Memo.getText());
 			return true;
 		}catch (Exception e2) {
 		   JOptionPane.showMessageDialog(this, "저장 오류");
 	   }
 		return false;
 	}
- 
-	public void openPerformed(){
-		FileDialog dialog=openWindow("열기");
 	
-		if(dialog==null) return;
-		String dfName = dialog.getDirectory() + dialog.getFile();
+	public void openPerformed(String dfName){
 	   
 		if(!isFileTxt(dfName)){
 			JOptionPane.showMessageDialog(this, "열수 없는 형태의 파일입니다.\n확장자가 .txt인 파일을 선택해 주세요.");
@@ -146,19 +170,13 @@ public class MemoManager extends JFrame implements ActionListener{
 		   		Memo.append(line + "\n");
 		   	}
 		   	reader.close(); 
-		   	setTitle(dialog.getFile());
+		   	setTitle(returnFileName(dfName));
 	   	} catch (Exception e2) {
 	   		JOptionPane.showMessageDialog(this, "열기 오류");
 	   	}
 	}
-
-	public boolean deletePerformed(){
-		FileDialog dialog=openWindow("삭제");
-	 
-		if(dialog==null) return false;
-	 
-		String dfName = dialog.getDirectory() + dialog.getFile();
-	 
+	
+	public boolean deletePerformed(String dfName){
 		try {
 			File file = new File(dfName);
 			if(file.exists()){
@@ -173,14 +191,14 @@ public class MemoManager extends JFrame implements ActionListener{
 					}
 				}
 			}else{
-				JOptionPane.showMessageDialog(this, dialog.getFile()+" 파일을 찾을 수 없습니다.");
+				JOptionPane.showMessageDialog(this, returnFileName(dfName)+" 파일을 찾을 수 없습니다.");
 			} 
 		}catch (Exception e2) {
 			JOptionPane.showMessageDialog(this, "삭제 오류");
 		}
 		return false;
  	}
- 
+
  	@Override
  	public void actionPerformed(ActionEvent e) {   
 	 	if(e.getSource() == btnClear) {
@@ -188,7 +206,7 @@ public class MemoManager extends JFrame implements ActionListener{
    		}
    
    		else if(e.getSource() == btnSave||e.getSource() == mnuSave){
-	   		savePerformed();
+	   		openWindow("저장");
    		}
    	
    		else if(e.getSource()==mnuNew){
@@ -196,11 +214,10 @@ public class MemoManager extends JFrame implements ActionListener{
    		}
    
    		else if(e.getSource() == mnuOpen) { 
-	   		openPerformed();
-   		}
+   			openWindow("열기");   		}
    
    		else if(e.getSource() == mnuDelete){
-	   		deletePerformed();
+	   		openWindow("삭제");
    		}
    
    		else if(e.getSource() == mnuExit){
