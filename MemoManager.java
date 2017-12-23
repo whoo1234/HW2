@@ -170,6 +170,7 @@ public class MemoManager extends JFrame implements ActionListener{
 		   		return contents;
 		   }
 		   else{
+			   System.out.println("파일이 존재하지 않습니다.");
 			   return "Not Exist";
 		   }
 	   	} catch (Exception e2) {

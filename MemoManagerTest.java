@@ -15,7 +15,7 @@ public class MemoManagerTest {
 	@Test
 	public void testDeletePerformed() {
 		MemoManager Memo = new MemoManager();
-		String path=System.getProperty("user.dir")+".txt";
+		String path=System.getProperty("user.dir")+"2.txt";
 		String contents="Merry X-mas and Happy New Year!";
 		Memo.savePerformed(path, contents);
 		assertTrue(Memo.deletePerformed(path));
