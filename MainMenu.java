@@ -18,6 +18,10 @@ public class MainMenu{
 
 	public static void main(String args[]){
 		int n=show_menu();
+<<<<<<< HEAD
+		
+=======
+>>>>>>> 1d243cff53d11e242f1db6ce12f87283ac88ff62
 		switch(n){
 			case 1:
 				MemoManager memoManager = new MemoManager();
