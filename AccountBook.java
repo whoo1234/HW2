@@ -9,8 +9,7 @@ public class AccountBook {
 	private int nowindexnum;
 	private ArrayList<String[]> listMember = new ArrayList<String[]>();
 	Scanner scan = new Scanner(System.in);
-	Scanner scan2 = new Scanner(System.in);
-	
+	Scanner scan2 = new Scanner(System.in);	
 	int lastIndex;
 
 	public void actAccountBook() {
@@ -24,7 +23,7 @@ public class AccountBook {
 	public void showMenu() {
 		System.out.println("=========================================");
 		System.out.println("수행할 메뉴를 선택해 주세요.\n");
-		System.out.println("1. 기록 보기");
+		System.out.println("1. 사용 기록");
 		System.out.println("2. 추가");
 		System.out.println("3. 수정");
 		System.out.println("4. 삭제");
@@ -59,11 +58,11 @@ public class AccountBook {
 	}
 
 	public void showList() {
-		System.out.println("번호\t종류\t이름\t날짜\t금액");
+		System.out.println("번호\t구분\t내역\t날짜\t금액");
 		System.out.println("-----------------------------------------");
 		printMember();
 		System.out.println("-----------------------------------------");
-		System.out.println("총 금액 :" + printTotal());
+		System.out.println("현재 남은 잔액 :" + printTotal());
 	}
 
 	public void printMember() {
@@ -113,11 +112,11 @@ public class AccountBook {
 	public String[] inputSupplement(int nowindexnum, String[] budget) {
 		budget[0] = String.valueOf(nowindexnum);
 		budget[1] = "수입";
-		System.out.print("이름 :");
+		System.out.print("수입 내용:");
 		budget[2] = scan2.nextLine();
-		System.out.print("날짜(ex.170118):");
+		System.out.print("수입 날짜(ex.170118):");
 		budget[3] = scan.next();
-		System.out.print("금액 :");
+		System.out.print("수입 금액 :");
 		budget[4] = scan.next();
 		return budget;
 	}
@@ -125,11 +124,11 @@ public class AccountBook {
 	public String[] inputSubtract(int nowindexnum, String[] budget) {
 		budget[0] = String.valueOf(nowindexnum);
 		budget[1] = "지출";
-		System.out.print("이름 :");
+		System.out.print("지출 내용:");
 		budget[2] = scan2.nextLine();
-		System.out.print("날짜(ex.170118) :");
+		System.out.print("지출 날짜(ex.170118):");
 		budget[3] = scan.next();
-		System.out.print("금액 :");
+		System.out.print("지출 금액 :");
 		budget[4] = scan.next();
 		return budget;
 	}
@@ -189,25 +188,24 @@ public class AccountBook {
 		String nullarray[] = new String[5];
 		
 		try{
-		removemember = listMember.get(indexnumber);
+			removemember = listMember.get(indexnumber);
 	
-		if (removemember[1] == "수입") 
-			listMember.remove(indexnumber);
-		else if (removemember[1] == "지출")
-			listMember.remove(indexnumber);
-		
-		for (int i = 0; i < listMember.size(); i++) {
-			removemember = listMember.get(i);
-			removemember[0] = String.valueOf(i);
-		}
-		System.out.println("삭제되었습니다.");
-		
-		lastIndex = listMember.size()-1;
-		if(lastIndex>=0)
-			return listMember.get(lastIndex);
+			if (removemember[1] == "수입") 
+				listMember.remove(indexnumber);
+			else if (removemember[1] == "지출")
+				listMember.remove(indexnumber);		
+			for (int i = 0; i < listMember.size(); i++) {
+				removemember = listMember.get(i);
+				removemember[0] = String.valueOf(i);
+			}
+			System.out.println("삭제되었습니다.");		
+			lastIndex = listMember.size()-1;
+			if(lastIndex>=0)
+				return listMember.get(lastIndex);
 		}catch(IndexOutOfBoundsException e){
 			printErrorMessage();
 		}
+		
 		return nullarray;
 	}
 	
