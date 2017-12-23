@@ -1,4 +1,3 @@
-package se;
 import java.util.*;
 
 public class CalculatorProgram {

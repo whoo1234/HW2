@@ -1,5 +1,3 @@
-package se;
-
 import static org.junit.Assert.*;
 import org.junit.*;
 

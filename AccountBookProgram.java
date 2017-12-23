@@ -1,5 +1,3 @@
-package se;
-
 public class AccountBookProgram {
 	static AccountBook ac = new AccountBook();
 
