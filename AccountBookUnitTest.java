@@ -18,7 +18,7 @@ public class AccountBookUnitTest {
 		String supplementBudget2[] = {"1", "¼öÀÔ", "¿ëµ·", "171229", "500000"}; 
 		accountbook.supplementBudget(supplementBudget);
 		accountbook.supplementBudget(supplementBudget2);
-		assertTrue(supplementBudget.equals(accountbook.delete(1)));
+		assertArrayEquals(supplementBudget,accountbook.delete(1));
 	}
 }
 

@@ -168,8 +168,7 @@ public class AccountBook {
 		
 		listMember.set(indexnumber, modifymember);
 		}catch(IndexOutOfBoundsException e){
-			System.out.println("저장된 데이터가 없어서 수정할 수 없습니다.");
-			System.out.println("먼저 데이터를 입력해주세요. ^^");
+			printErrorMessage();
 		}
 	}
 
@@ -181,8 +180,7 @@ public class AccountBook {
 			indexnumber = scan.nextInt();
 			delete(indexnumber);
 		}catch(IndexOutOfBoundsException e){
-			System.out.println("저장된 데이터가 없어서 삭제할 수 없습니다.");
-			System.out.println("먼저 데이터를 입력해주세요.");
+			printErrorMessage();
 		}		
 	}
 
@@ -192,8 +190,7 @@ public class AccountBook {
 		
 		try{
 		removemember = listMember.get(indexnumber);
-		
-		
+	
 		if (removemember[1] == "수입") 
 			listMember.remove(indexnumber);
 		else if (removemember[1] == "지출")
@@ -209,10 +206,14 @@ public class AccountBook {
 		if(lastIndex>=0)
 			return listMember.get(lastIndex);
 		}catch(IndexOutOfBoundsException e){
-			System.out.println("저장된 데이터가 없어서 삭제할 수 없습니다.");
-			System.out.println("먼저 데이터를 입력해주세요.");
+			printErrorMessage();
 		}
 		return nullarray;
+	}
+	
+	public void printErrorMessage(){
+		System.out.println("저장된 데이터가 없어서 삭제할 수 없습니다.");
+		System.out.println("먼저 데이터를 입력해주세요.");
 	}
 
 	public void backMain() {
