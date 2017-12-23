@@ -53,6 +53,18 @@ public class MemoManager extends JFrame implements ActionListener{
   mnuDelete.addActionListener(this);
   mnuExit.addActionListener(this);
  }
+ public void exitPerformed(){
+	 System.exit(0);
+ }
+ 
+ public void clearPerformed(){
+	 Memo.setText("");
+ }
+ 
+ public void newPerformed(){
+	 Memo.setText("");
+	 setTitle("제목없음");
+ }
  public boolean isFileTxt(String fileName){
 	 String ext=fileName.substring(fileName.lastIndexOf(".")+1, fileName.length());
 	 if(ext.equals("txt"))
@@ -66,25 +78,26 @@ public class MemoManager extends JFrame implements ActionListener{
 	 else
 		 return false;
  }
- 
- public void exitPerformed(){
-	 System.exit(0);
+ public FileDialog openWindow(String windowTitle){
+	 FileDialog dialog;
+	 if(windowTitle.equals("저장"))
+		 dialog = new FileDialog(this, windowTitle, FileDialog.SAVE);
+	 else
+		 dialog = new FileDialog(this, windowTitle, FileDialog.LOAD);
+	 dialog.setDirectory("."); 
+	 dialog.setVisible(true); 
+	   
+	 if(dialog.getFile() == null)
+		return null;
+	 return dialog;
  }
- 
- public void clearPerformed(){
-	 Memo.setText("");
- }
- 
- public void newPerformed(){
-	 Memo.setText("");
-	 setTitle("제목없음");
- }
- 
  public void savePerformed(){
-	FileDialog dialog = new FileDialog(this, "저장", FileDialog.SAVE);
-	dialog.setDirectory(".");
-	dialog.setVisible(true);
-	if(dialog.getFile() == null) return;
+	FileDialog dialog=openWindow("저장");
+	if(dialog==null) return;
+	if(!isFileTxt(dialog.getFile())){
+		JOptionPane.showMessageDialog(this, "메모장은 텍스트파일 전용입니다.\n확장자(.txt)를 꼭 붙여서 저장해주세요.");
+		return;
+	}
 	String dfName = dialog.getDirectory() + dialog.getFile()+".txt";
 
 	try {
@@ -98,22 +111,13 @@ public class MemoManager extends JFrame implements ActionListener{
  }
  
  public void openPerformed(){
-	   FileDialog dialog = new FileDialog(this, "열기", FileDialog.LOAD);
-	   dialog.setDirectory(".");
-	   dialog.setVisible(true);
-	   
-	   if(dialog.getFile() == null)
-		   return;
-	   
+	   FileDialog dialog=openWindow("열기");
+	   if(dialog==null) return;
 	   String dfName = dialog.getDirectory() + dialog.getFile();
-
-	   // 파일 확장자가 .txt가 아닐 때 에러처리 해주기
 	   if(!isFileTxt(dfName)){
-		   JOptionPane.showMessageDialog(this, "열수 없는 형태의 파일입니다.");
+		   JOptionPane.showMessageDialog(this, "열수 없는 형태의 파일입니다.\n확장자가 .txt인 파일을 선택해 주세요.");
 		   return;
 	   }
-	   
-	   
 	   try {
 		   	BufferedReader reader = new BufferedReader(new FileReader(dfName));
 		   	Memo.setText("");
@@ -127,17 +131,10 @@ public class MemoManager extends JFrame implements ActionListener{
 		   JOptionPane.showMessageDialog(this, "열기 오류");
 	   }
  }
- 
- public void deletePerformed(){
-	   FileDialog dialog = new FileDialog(this, "삭제", FileDialog.LOAD);
-	   dialog.setDirectory("."); 
-	   dialog.setVisible(true); 
-	   
-	   if(dialog.getFile() == null)
-		   return;
-	   
-	   String dfName = dialog.getDirectory() + dialog.getFile();
-	   
+
+ public boolean deletePerformed(FileDialog dialog){
+	 if(dialog==null) return false;
+	 String dfName = dialog.getDirectory() + dialog.getFile();
 	   try {
 		   File file = new File(dfName);
 		   if(file.exists()){
@@ -145,6 +142,7 @@ public class MemoManager extends JFrame implements ActionListener{
 				   if(file.delete()){
 					   JOptionPane.showMessageDialog(this, "파일이 삭제되었습니다.");
 					   newPerformed();
+					   return true;
 				   }
 				   else{
 					   JOptionPane.showMessageDialog(this, "파일 삭제에 실패했습니다.");
@@ -156,6 +154,8 @@ public class MemoManager extends JFrame implements ActionListener{
 	   }catch (Exception e2) {
 		  JOptionPane.showMessageDialog(this, "삭제 오류");
 	   }
+	   return false;
+
  }
 
  @Override
@@ -173,14 +173,14 @@ public class MemoManager extends JFrame implements ActionListener{
 	   openPerformed();
    }
    else if(e.getSource() == mnuDelete){
-	   deletePerformed();
+	   deletePerformed(openWindow("삭제"));
    }
    else if(e.getSource()==mnuExit){
 	   exitPerformed();
    }
  }
  
- public static void main(String args[]){
-	 new MemoManager();
- }
-}
+ 	public static void main(String args[]){
+ 		new MemoManager();
+ 	}
+ 
