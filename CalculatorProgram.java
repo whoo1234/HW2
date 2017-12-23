@@ -80,7 +80,7 @@ class Calculator {
 			default:
 				System.out.println("입력한 식에 오류가 있습니다.");
 			}
-			System.out.printf("결과값은 %.2f 입니다.\n", result);
+			System.out.println("결과값은" + Math.floor(result*100)/100 + "입니다.");
 		}catch (Exception e) {
 			System.out.println("입력 오류입니다.");
 		}
@@ -153,7 +153,7 @@ class Calculator {
 			System.out.print("변환할 값을 입력하세요(pound) >> ");
 			try {
 				input = scanner.nextDouble();
-				System.out.printf("%.2f kg\n", convertPoundToKg(input));
+				System.out.println(Math.floor(convertPoundToKg(input)*100)/100 + " kg");
 			} catch(InputMismatchException e) {
 				System.out.println("입력 오류입니다.");
 				scanner.nextLine();
@@ -165,7 +165,7 @@ class Calculator {
 			
 			try {
 				input = scanner.nextDouble();
-				System.out.printf("%.2f pound\n", convertKgToPound(input));
+				System.out.println(Math.floor(convertKgToPound(input)*100)/100 + " pound");
 			} catch(InputMismatchException e) {
 				System.out.println("입력 오류입니다.");
 				scanner.nextLine();
@@ -203,7 +203,7 @@ class Calculator {
 			
 			try {
 				input = scanner.nextDouble();
-				System.out.printf("%.2f cm\n", convertInchToCm(input));
+				System.out.println(Math.floor(convertInchToCm(input)*100)/100 + " cm");
 			} catch(InputMismatchException e) {
 				System.out.println("입력 오류입니다.");
 				scanner.nextLine();
@@ -215,7 +215,7 @@ class Calculator {
 			
 			try {
 				input = scanner.nextDouble();
-				System.out.printf("%.2f inch\n", convertCmToInch(input));
+				System.out.println(Math.floor(convertCmToInch(input)*100)/100 + " inch");
 			} catch(InputMismatchException e) {
 				System.out.println("입력 오류입니다.");
 				scanner.nextLine();
@@ -251,7 +251,7 @@ class Calculator {
 			System.out.print("변환할 값을 입력하세요(°F) >> ");
 			try {
 				input = scanner.nextDouble();
-				System.out.printf("%.2f °C\n", convertFToC(input));
+				System.out.println(Math.floor(convertFToC(input)*100)/100 + " °C");
 			} catch(InputMismatchException e) {
 				System.out.println("입력 오류입니다.");
 				scanner.nextLine();
@@ -263,7 +263,7 @@ class Calculator {
 			
 			try {
 				input = scanner.nextDouble();
-				System.out.printf("%.2f °F\n", convertCToF(input));
+				System.out.println(Math.floor(convertCToF(input)*100)/100 + " °F");
 			} catch(InputMismatchException e) {
 				System.out.println("입력 오류입니다.");
 				scanner.nextLine();
