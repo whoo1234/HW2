@@ -103,26 +103,28 @@ public class MemoManager extends JFrame implements ActionListener{
 		return dialog;
 	}
  
-	public void savePerformed(){
+	public boolean savePerformed(){
 		FileDialog dialog=openWindow("저장");
 	
-		if(dialog==null) return;
+		if(dialog==null) return false;
 		
 		if(!isFileTxt(dialog.getFile())){
 			JOptionPane.showMessageDialog(this, "메모장은 텍스트파일만 읽고 쓸 수 있습니다.\n확장자(.txt)를 꼭 붙여서 저장해주세요.");
-			return;
+			return false;
 		}
 	
-		String dfName = dialog.getDirectory() + dialog.getFile()+".txt";
+		String dfName = dialog.getDirectory() + dialog.getFile();
 
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(dfName));
 			writer.write(Memo.getText());
 			writer.close();
 			setTitle(dialog.getFile());
+			return true;
 		}catch (Exception e2) {
 		   JOptionPane.showMessageDialog(this, "저장 오류");
 	   }
+		return false;
 	}
  
 	public void openPerformed(){
