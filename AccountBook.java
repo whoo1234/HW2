@@ -20,12 +20,12 @@ public class AccountBook {
 
 	public void showMenu() {
 		System.out.println("=========================================");
-		System.out.println("¼öÇàÇÒ ¸Ş´º¸¦ ¼±ÅÃÇØ ÁÖ¼¼¿ä.\n");
-		System.out.println("1. »ç¿ë ±â·Ï");
-		System.out.println("2. Ãß°¡");
-		System.out.println("3. ¼öÁ¤");
-		System.out.println("4. »èÁ¦");
-		System.out.println("5. µ¹¾Æ°¡±â");
+		System.out.println("ìˆ˜í–‰í•  ë©”ë‰´ë¥¼ ì„ íƒí•´ ì£¼ì„¸ìš”.\n");
+		System.out.println("1. ì‚¬ìš© ê¸°ë¡");
+		System.out.println("2. ì¶”ê°€");
+		System.out.println("3. ìˆ˜ì •");
+		System.out.println("4. ì‚­ì œ");
+		System.out.println("5. ëŒì•„ê°€ê¸°");
 		System.out.println("=========================================");
 		selectmenu = scan.nextInt();
 		System.out.println("-----------------------------------------");
@@ -49,18 +49,18 @@ public class AccountBook {
 			backMain();
 			break;
 		default:
-			System.out.println("´Ù½Ã °í¸£¼¼¿ä.");
+			System.out.println("ë‹¤ì‹œ ê³ ë¥´ì„¸ìš”.");
 			System.out.println();
 			break;
 		}
 	}
 
 	public void showList() {
-		System.out.println("¹øÈ£\t±¸ºĞ\t³»¿ª\t³¯Â¥\t±İ¾×");
+		System.out.println("ë²ˆí˜¸\têµ¬ë¶„\të‚´ì—­\të‚ ì§œ\tê¸ˆì•¡");
 		System.out.println("-----------------------------------------");
 		printMember();
 		System.out.println("-----------------------------------------");
-		System.out.println("ÇöÀç ³²Àº ÀÜ¾× :" + printTotal());
+		System.out.println("í˜„ì¬ ë‚¨ì€ ì”ì•¡ :" + printTotal());
 	}
 
 	public void printMember() {
@@ -79,10 +79,10 @@ public class AccountBook {
 		
 		for(int i=0; i<listMember.size(); i++){
 			me = listMember.get(i);
-			if(me[1] == "¼öÀÔ"){
+			if(me[1] == "ìˆ˜ì…"){
 				total += Integer.parseInt(me[4]);
 			}
-			else if(me[1] == "ÁöÃâ"){
+			else if(me[1] == "ì§€ì¶œ"){
 				total -= Integer.parseInt(me[4]);
 			}
 		}
@@ -94,8 +94,8 @@ public class AccountBook {
 		String budget[] = new String[5];
 		nowindexnum = listMember.size();
 
-		System.out.println("\n1. ¼öÀÔ");
-		System.out.println("2. ÁöÃâ");
+		System.out.println("\n1. ìˆ˜ì…");
+		System.out.println("2. ì§€ì¶œ");
 		add = scan.nextInt();
 		if (add == 1) {
 			budget = inputSupplement(nowindexnum, budget);
@@ -109,24 +109,24 @@ public class AccountBook {
 
 	public String[] inputSupplement(int nowindexnum, String[] budget) {
 		budget[0] = String.valueOf(nowindexnum);
-		budget[1] = "¼öÀÔ";
-		System.out.print("¼öÀÔ ³»¿ë:");
+		budget[1] = "ìˆ˜ì…";
+		System.out.print("ìˆ˜ì… ë‚´ìš©:");
 		budget[2] = scan2.nextLine();
-		System.out.print("¼öÀÔ ³¯Â¥(ex.170118):");
+		System.out.print("ìˆ˜ì… ë‚ ì§œ(ex.170118):");
 		budget[3] = scan.next();
-		System.out.print("¼öÀÔ ±İ¾× :");
+		System.out.print("ìˆ˜ì… ê¸ˆì•¡ :");
 		budget[4] = scan.next();
 		return budget;
 	}
 
 	public String[] inputSubtract(int nowindexnum, String[] budget) {
 		budget[0] = String.valueOf(nowindexnum);
-		budget[1] = "ÁöÃâ";
-		System.out.print("ÁöÃâ ³»¿ë:");
+		budget[1] = "ì§€ì¶œ";
+		System.out.print("ì§€ì¶œ ë‚´ìš©:");
 		budget[2] = scan2.nextLine();
-		System.out.print("ÁöÃâ ³¯Â¥(ex.170118):");
+		System.out.print("ì§€ì¶œ ë‚ ì§œ(ex.170118):");
 		budget[3] = scan.next();
-		System.out.print("ÁöÃâ ±İ¾× :");
+		System.out.print("ì§€ì¶œ ê¸ˆì•¡ :");
 		budget[4] = scan.next();
 		return budget;
 	}
@@ -148,12 +148,12 @@ public class AccountBook {
 		int selectedNumber;
 		String modifymember[] = new String[5];
 
-		System.out.println("\n¼öÁ¤ÇÒ Ç×¸ñÀÇ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+		System.out.println("\nìˆ˜ì •í•  í•­ëª©ì˜ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 		try{
 		indexnumber = scan.nextInt();
 		modifymember = listMember.get(indexnumber);
-		System.out.println("\n1. ¼öÀÔ");
-		System.out.println("2. ÁöÃâ");
+		System.out.println("\n1. ìˆ˜ì…");
+		System.out.println("2. ì§€ì¶œ");
 		selectedNumber = scan.nextInt();
 		
 		if (selectedNumber == 1) {
@@ -172,7 +172,7 @@ public class AccountBook {
 	public void deleteMember() {
 		int indexnumber;
 
-		System.out.println("\n»èÁ¦ÇÒ Ç×¸ñÀÇ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+		System.out.println("\nì‚­ì œí•  í•­ëª©ì˜ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 		try{
 			indexnumber = scan.nextInt();
 			delete(indexnumber);
@@ -188,15 +188,15 @@ public class AccountBook {
 		try{
 			removemember = listMember.get(indexnumber);
 	
-			if (removemember[1] == "¼öÀÔ") 
+			if (removemember[1] == "ìˆ˜ì…") 
 				listMember.remove(indexnumber);
-			else if (removemember[1] == "ÁöÃâ")
+			else if (removemember[1] == "ì§€ì¶œ")
 				listMember.remove(indexnumber);		
 			for (int i = 0; i < listMember.size(); i++) {
 				removemember = listMember.get(i);
 				removemember[0] = String.valueOf(i);
 			}
-			System.out.println("»èÁ¦µÇ¾ú½À´Ï´Ù.");		
+			System.out.println("ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");		
 			lastIndex = listMember.size()-1;
 			if(lastIndex>=0)
 				return listMember.get(lastIndex);
@@ -208,12 +208,13 @@ public class AccountBook {
 	}
 	
 	public void printErrorMessage(){
-		System.out.println("ÀúÀåµÈ µ¥ÀÌÅÍ°¡ ¾ø¾î¼­ »èÁ¦ÇÒ ¼ö ¾ø½À´Ï´Ù.");
-		System.out.println("¸ÕÀú µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		System.out.println("ì €ì¥ëœ ë°ì´í„°ê°€ ì—†ì–´ì„œ ì‚­ì œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+		System.out.println("ë¨¼ì € ë°ì´í„°ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	}
 
 	public void backMain() {
-		System.out.println("¸ŞÀÎÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+		System.out.println("ë©”ì¸ìœ¼ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.");
+		System.out.println();
 		done = false;
 	}
 }
