@@ -29,10 +29,10 @@ public class MainMenu{
 				accountBookTest.main(args);
 				break;
 			case 4:
-				System.out.println("프로그램을 종료합니다.");
+				System.out.println("Quit");
 				return;
 			default:
-				System.out.println("잘못된 입력입니다.");
+				System.out.println("You etered the wrong input. Please retry to enter the input number.");
 		}
 	}
 }
