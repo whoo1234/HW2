@@ -32,7 +32,7 @@ public class MainMenu{
 				System.out.println("Quit");
 				return;
 			default:
-				System.out.println("You entered the wrong input. Please retry to enter the input number.");
+				System.out.println("You entered the wrong input.\nPlease restart this program.");
 		}
 	}
 }
